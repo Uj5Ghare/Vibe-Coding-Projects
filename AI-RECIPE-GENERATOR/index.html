@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2316A085' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M15 2H9a1 1 0 0 0-1 1v1a4 4 0 0 0 8 0V3a1 1 0 0 0-1-1Z'/%3E%3Cpath d='M6.18 11.5A2.2 2.2 0 0 1 4 10.8V8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v2.8a2.2 2.2 0 0 1-2.18 1.73.7.7 0 0 0-.62.92v.35a3.6 3.6 0 0 1-7.2 0v-.35a.7.7 0 0 0-.62-.92Z'/%3E%3Cpath d='m12 5 0.34 0.74 0.74 0.34-0.74 0.34L12 7l-0.34-0.74-0.74-0.34 0.74-0.34Z'/%3E%3C/svg%3E" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Recipe Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  <script type="importmap">
+{
+  "imports": {
+    "react/": "https://aistudiocdn.com/react@^19.1.1/",
+    "react": "https://aistudiocdn.com/react@^19.1.1",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.1.1/",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.16.0"
+  }
+}
+</script>
+  <style>
+    @keyframes pop-in {
+      0% {
+        opacity: 0;
+        transform: scale(0.5);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+    .animate-pop-in {
+      animation: pop-in 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+    }
+     @keyframes spin {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
+    .animate-spin-slow {
+        animation: spin 2s linear infinite;
+    }
+  </style>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body class="bg-[#FDFBF7]">
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>
