@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ujwal's Task Tracker</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+</head>
+
+<body>
+
+    <div class="app-wrapper">
+        <header>
+            <div class="header-content">
+                <h1>📋 Ujwal's Task Tracker</h1>
+                <p class="subtitle">Stay organized, stay productive</p>
+            </div>
+            <button class="btn-add" onclick="openModal()">＋ New Task</button>
+        </header>
+
+        <!-- Tab Nav -->
+        <div class="tab-nav">
+            <button class="tab-btn active" onclick="switchTab('tasks', this)">📝 Tasks</button>
+            <button class="tab-btn" onclick="switchTab('dashboard', this)">📊 Dashboard</button>
+        </div>
+
+        <!-- ═══════════════ TASKS TAB ═══════════════ -->
+        <div id="tab-tasks">
+            <!-- Stats Bar -->
+            <div class="stats-bar">
+                <div class="stat">
+                    <span class="stat-num" id="totalCount">0</span>
+                    <span class="stat-label">Total</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-num" id="inProgressCount">0</span>
+                    <span class="stat-label">In Progress</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-num" id="doneCount">0</span>
+                    <span class="stat-label">Completed</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-num" id="notStartedCount">0</span>
+                    <span class="stat-label">Not Started</span>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="filters">
+                <input type="text" id="searchInput" placeholder="🔍 Search tasks..." oninput="renderTable()" />
+                <select id="filterStatus" onchange="renderTable()">
+                    <option value="">All Status</option>
+                    <option value="Not Started">Not Started</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="Done">Done</option>
+                </select>
+                <select id="filterPriority" onchange="renderTable()">
+                    <option value="">All Priority</option>
+                    <option value="High">High</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Low">Low</option>
+                </select>
+                <button class="btn-clear" onclick="clearFilters()">Clear</button>
+            </div>
+
+            <!-- Table -->
+            <div class="table-container">
+                <table id="taskTable">
+                    <thead>
+                        <tr>
+                            <th>✅</th>
+                            <th class="sortable" onclick="sortTable('date')">Date ⇅</th>
+                            <th class="sortable" onclick="sortTable('task')">Task ⇅</th>
+                            <th class="sortable" onclick="sortTable('priority')">Priority ⇅</th>
+                            <th>Est. Time</th>
+                            <th>Actual Time</th>
+                            <th>Status</th>
+                            <th>Notes</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="taskBody"></tbody>
+                </table>
+                <div class="empty-state" id="emptyState">
+                    <p>🗂️ No tasks yet. Click <strong>+ New Task</strong> to get started!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══════════════ DASHBOARD TAB ═══════════════ -->
+        <div id="tab-dashboard" style="display:none;">
+
+            <!-- Time Summary Cards -->
+            <div class="dash-cards">
+                <div class="dash-card accent-blue">
+                    <div class="dash-icon">⏱️</div>
+                    <div class="dash-info">
+                        <span class="dash-value" id="d-totalEst">0h 0m</span>
+                        <span class="dash-label">Total Estimated</span>
+                    </div>
+                </div>
+                <div class="dash-card accent-purple">
+                    <div class="dash-icon">⏳</div>
+                    <div class="dash-info">
+                        <span class="dash-value" id="d-totalAct">0h 0m</span>
+                        <span class="dash-label">Total Actual</span>
+                    </div>
+                </div>
+                <div class="dash-card accent-green">
+                    <div class="dash-icon">✅</div>
+                    <div class="dash-info">
+                        <span class="dash-value" id="d-completedEst">0h 0m</span>
+                        <span class="dash-label">Est. (Completed)</span>
+                    </div>
+                </div>
+                <div class="dash-card accent-orange" id="d-varianceCard">
+                    <div class="dash-icon">📈</div>
+                    <div class="dash-info">
+                        <span class="dash-value" id="d-variance">0h 0m</span>
+                        <span class="dash-label">Time Variance</span>
+                    </div>
+                </div>
+                <div class="dash-card accent-teal">
+                    <div class="dash-icon">🎯</div>
+                    <div class="dash-info">
+                        <span class="dash-value" id="d-efficiency">—</span>
+                        <span class="dash-label">Efficiency Rate</span>
+                    </div>
+                </div>
+                <div class="dash-card accent-red">
+                    <div class="dash-icon">🔥</div>
+                    <div class="dash-info">
+                        <span class="dash-value" id="d-overdue">0</span>
+                        <span class="dash-label">Overdue Tasks</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Row 1 -->
+            <div class="charts-row">
+                <div class="chart-card">
+                    <h3>📊 Est. vs Actual Time (per Task)</h3>
+                    <div class="chart-wrap"><canvas id="barChart"></canvas></div>
+                </div>
+                <div class="chart-card chart-card-sm">
+                    <h3>🍩 Tasks by Status</h3>
+                    <div class="chart-wrap"><canvas id="donutStatus"></canvas></div>
+                </div>
+            </div>
+
+            <!-- Charts Row 2 -->
+            <div class="charts-row">
+                <div class="chart-card chart-card-sm">
+                    <h3>🎯 Tasks by Priority</h3>
+                    <div class="chart-wrap"><canvas id="donutPriority"></canvas></div>
+                </div>
+                <div class="chart-card">
+                    <h3>📅 Time Logged Over Dates</h3>
+                    <div class="chart-wrap"><canvas id="lineChart"></canvas></div>
+                </div>
+            </div>
+
+            <!-- Task Performance Table -->
+            <div class="perf-table-wrap">
+                <h3>📋 Task Performance Breakdown</h3>
+                <table class="perf-table">
+                    <thead>
+                        <tr>
+                            <th>Task</th>
+                            <th>Priority</th>
+                            <th>Status</th>
+                            <th>Estimated</th>
+                            <th>Actual</th>
+                            <th>Variance</th>
+                            <th>Efficiency</th>
+                        </tr>
+                    </thead>
+                    <tbody id="perfTableBody"></tbody>
+                </table>
+                <div class="empty-state" id="perfEmpty" style="display:none">
+                    <p>📭 No task data to display yet.</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ═══════════════ MODAL ═══════════════ -->
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="modalTitle">Add New Task</h2>
+                <button class="modal-close" onclick="closeModal()">✕</button>
+            </div>
+            <form id="taskForm" onsubmit="saveTask(event)">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Date <span class="req">*</span></label>
+                        <input type="date" id="taskDate" required />
+                    </div>
+                    <div class="form-group">
+                        <label>Priority <span class="req">*</span></label>
+                        <select id="taskPriority" required>
+                            <option value="">Select...</option>
+                            <option value="High">🔴 High</option>
+                            <option value="Medium">🟡 Medium</option>
+                            <option value="Low">🟢 Low</option>
+                        </select>
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Task Name <span class="req">*</span></label>
+                        <input type="text" id="taskName" placeholder="Enter task description..." required />
+                    </div>
+                    <div class="form-group">
+                        <label>Estimated Time <small>(e.g. 2h 30m)</small></label>
+                        <input type="text" id="taskEstTime" placeholder="e.g. 2h 30m" />
+                    </div>
+                    <div class="form-group">
+                        <label>Actual Time <small>(e.g. 3h)</small></label>
+                        <input type="text" id="taskActTime" placeholder="e.g. 3h" />
+                    </div>
+                    <div class="form-group">
+                        <label>Status <span class="req">*</span></label>
+                        <select id="taskStatus" required>
+                            <option value="">Select...</option>
+                            <option value="Not Started">Not Started</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Done">Done</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Completed</label>
+                        <div class="checkbox-wrap">
+                            <input type="checkbox" id="taskCompleted" />
+                            <label for="taskCompleted" class="checkbox-label">Mark as Completed ✅</label>
+                        </div>
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Notes</label>
+                        <textarea id="taskNotes" rows="3" placeholder="Any additional notes..."></textarea>
+                    </div>
+                </div>
+                <input type="hidden" id="editIndex" value="-1" />
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="btn-save">Save Task</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
