@@ -36,4 +36,4 @@ I was struggling with my daily management and I wouldn't be able to manage my da
 - **HTML5**
 - **CSS3** (Custom Modern Design)
 - **JavaScript** (Vanilla)
-- **app.js** (js logic)
+- **app.js** (APP logic)
