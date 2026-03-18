@@ -1,0 +1,7 @@
+Sign Language Detection Model Training Report
+==========================================
+
+Total samples: 4429
+Number of classes: 28
+
+Overall accuracy: 93.91%
