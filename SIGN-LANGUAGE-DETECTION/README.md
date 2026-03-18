@@ -1,5 +1,8 @@
 ## Sign Detect — Real‑Time Sign Language Detection
 
+![Sign Language Detection](images/homepage.jpg)
+
+
 A Streamlit app that detects hand gestures from your webcam using MediaPipe and classifies them into A–Z plus special tokens (`space`, `del`, `nothing`) with a scikit‑learn Random Forest model.
 
 ### Features
@@ -13,8 +16,7 @@ A Streamlit app that detects hand gestures from your webcam using MediaPipe and 
 .
 ├─ app.py                      # Streamlit home page
 ├─ pages/
-│  ├─ _Sign_Language_Detection.py   # Streamlit detection page
-│  └─ _About_Developers.py          # About page
+│  └─ _Sign_Language_Detection.py   # Streamlit detection page
 ├─ create_dataset.py           # Build dataset (data.pickle) from image folders
 ├─ train_model.py              # Train Random Forest, save model.p and reports
 ├─ inference_classifier.py     # Standalone OpenCV webcam inference (no Streamlit)
@@ -69,6 +71,17 @@ python train_model.py
 streamlit run app.py
 ```
 In the home page, click “Go to Sign Language Detection”. Allow camera permissions.
+
+### Real-Time Detection Page (`_Sign_Language_Detection.py`)
+This page is the core of the project, providing interactive webcam inference:
+-   **Live Webcam Feed:** Renders 640×480 video with real-time gesture overlays.
+-   **Hand Landmarks:** Uses MediaPipe to track 21 hand points and draw bounding boxes.
+-   **Sentence Building:** 
+    -   **Debouncing:** Predicted signs are added to a sentence after staying steady for 1.0 second.
+    -   **Special Tokens:** Support for `space` (adds a space) and `del` (removes last character).
+-   **Controls:** A sidebar toggle to clear the entire sentence and a "Back to Home" button.
+-   **Performance:** Uses `@st.cache_resource` to load the model once, ensuring fast inference.
+
 
 ### Standalone Webcam Inference (optional)
 ```bash
