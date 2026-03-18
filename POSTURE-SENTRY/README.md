@@ -1,12 +1,14 @@
 # 🛡️ POSTURE-SENTRY
 
-![Posture Sentry Banner](./assets/banner.png)
+<p align="center">
+  <img src="./assets/banner_wide.png" alt="Posture Sentry Wide Banner" width="100%">
+</p>
 
 ![AI-Computer Vision](https://img.shields.io/badge/AI-Computer%20Vision-green?style=for-the-badge)
 ![Python 3.8+](https://img.shields.io/badge/Python-3.8%2B-blue?style=for-the-badge)
 ![MediaPipe](https://img.shields.io/badge/Powered%20By-MediaPipe-cyan?style=for-the-badge)
 
-**Posture Sentry** is a real-time, AI-driven posture monitoring application designed to prevent slouching and promote a healthy spine while working. Using advanced Computer Vision (MediaPipe Pose), it tracks your alignment and alerts you if your posture slips below your baseline for too long.
+I was struggling with chronic back pain due to long office hours and sitting in front of the screen all the time. My posture was deteriorating, and I realized I needed a way to stay mindful of my spine health without manual tracking. That’s why I decided to create **Posture Sentry** with **Vibe Coding**—to bring health and alignment back to my workspace and manage my posture effectively.
 
 ---
 
